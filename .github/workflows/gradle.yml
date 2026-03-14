@@ -10,6 +10,7 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "main" ]
+    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -43,12 +44,12 @@ jobs:
         path: build/libs/*.jar
 
     - name: Upload Release Assets
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: latest
+        tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'latest' }}
         files: build/libs/*.jar
-        prerelease: true
+        prerelease: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
