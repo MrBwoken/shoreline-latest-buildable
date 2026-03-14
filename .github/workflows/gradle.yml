@@ -10,6 +10,7 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "main" ]
+    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -18,10 +19,12 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
@@ -41,6 +44,20 @@ jobs:
       with:
         name: Shoreline JARs
         path: build/libs/*.jar
+
+    - name: Debug JAR Output
+      run: ls -R build/libs/
+
+    - name: Upload Release Assets
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        artifacts: "build/libs/*.jar"
+        tag: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'latest' }}
+        name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'Latest Build' }}
+        prerelease: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
