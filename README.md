@@ -1,7 +1,8 @@
 # Shoreline Client
 
 Needs [Baritone API](https://github.com/cabaletta/baritone/releases/download/v1.11.2/baritone-api-fabric-1.11.2.jar) in order to work.
-[Build for 1.21.1](https://github.com/ImLegiitXD/shoreline-client-buildable/releases)
+[Build for 1.21.1](https://github.com/MrBwoken/shoreline-client-buildable/releases)
+[Latest Builds](https://github.com/MrBwoken/shoreline-latest-buildable/actions)
 
 I'll update this if theres new jar leaks 
 
