@@ -2,9 +2,10 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "**" ]
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
